@@ -1,4 +1,6 @@
 
+infinity = 1000000
+
 class Board:
 	def __init__(self):
 		self.tile = ['-','-','-','-','-','-','-','-','-']
@@ -60,6 +62,8 @@ class AI:
 	def __init__(self, type):
 		self.type = type
 		self.level = 0
+		self.nextMoveFlag = -1	#-1 if no next move win
+		self.nextMoveWin = False #so as winning moves aren't overwritten with moves that only prevent opponent wins
 		
 		if type == 'o':
 			self.enemy = 'x'
@@ -75,17 +79,15 @@ class AI:
 	def decideMove(self, board):
 		possMoves = board.squares_free()
 		possMovesScore = []
+		
 		#rate each Move
 		for move in possMoves:
-			#make move
 			board.turn(move)
-			#score move
-			moveScore = self.decideMoveRecursive(board)
-			#undo move
+			moveScore = self.myMove(board, move)
 			board.undoTurn(move)
-			#add score to list
 			possMovesScore.append(moveScore)
-		#maxMove
+			
+		#find best move
 		bestMoveIndex = 0
 		print("Move ratings: " + str(possMovesScore))
 		#print("Rate available moves")
@@ -93,39 +95,98 @@ class AI:
 			if possMovesScore[bestMoveIndex] < possMovesScore[i]:
 				bestMoveIndex = i
 		#take the max move
-		return possMoves[bestMoveIndex]	#squareNumber of bestMove
 		
-	def decideMoveRecursive(self, board):
-		moveScore = 0
-		#print("Recursion level START:" + str(self.level))
+		#check for next move wins/losses
+		if self.nextMoveFlag != -1:
+			print("Next Move Flag for board position: " + str(self.nextMoveFlag))
+			bestMoveIndex = possMoves.index(self.nextMoveFlag)	#change the index
+			self.nextMoveFlag = -1
+			self.nextMoveWin = False
+		
+		return possMoves[bestMoveIndex]	#squareNumber of bestMove
+	
+	def myMove(self, board, boardIndex):
+		self.level += 1
+		moveScore = -100
 		if board.checkWin(self.type):
-		#	print("self simulation win")
+			if self.level == 1:
+				self.nextMoveFlag = boardIndex
+				self.nextMoveWin = True
 			moveScore = 1
 		elif board.checkWin(self.enemy):
-		#	print("self simulation loss")
 			moveScore = -1
-		elif len(board.squares_free()) < 1:	#already know a win didn't occur
-		#	print("self simulation draw")
+		elif len(board.squares_free()) < 1:
 			moveScore = 0	#draw
 		else:
 			possMoves = board.squares_free()
-			
+			moveScores = []	#array of possibilities
+			#get all possible scores
 			for move in possMoves:
-		#		print("*before move " + str(move) + "*")
 				board.turn(move)
-		#		board.show_tiles()
-				stack.append(move)
-		#		print(stack)
-				self.level += 1
-				moveScore += self.decideMoveRecursive(board)
-				self.level -= 1
-		#		print("*after move " + str(move) + " - score: " + str(moveScore) + "*")
-				stack.pop()
+				moveScores.append(self.enemyMove(board, move))
 				board.undoTurn(move)	#reset board
-				#board.show_tiles()
-				
-		#result of function
-		#print("Recursion level END:" + str(self.level))
+			
+			#get Max possible
+			print("Possible Scores: " + str(moveScores))
+			for score in moveScores:
+				if moveScore < score:
+					moveScore = score
+			print("Chosen Max Score: " + str(moveScore))
+		
+		self.level -= 1
+		return moveScore
+	
+	def enemyMove(self, board, boardIndex):
+		self.level += 1
+		moveScore = 100
+		if board.checkWin(self.type):
+			moveScore = -1
+		elif board.checkWin(self.enemy):
+			if self.level == 2 and not self.nextMoveWin: #nextMoveWin for enemy
+				self.nextMoveFlag = boardIndex
+			moveScore = 1
+		elif len(board.squares_free()) < 1:
+			moveScore = 0	#draw
+		else:
+			possMoves = board.squares_free()
+			moveScores = []	#array of possibilities
+			#get all possible scores
+			for move in possMoves:
+				board.turn(move)
+				moveScores.append(self.enemyMove(board, move))
+				board.undoTurn(move)	#reset board
+			
+			#get min possible
+			#print("Possible Scores: " + str(moveScores))
+			for score in moveScores:
+				if moveScore > score:
+					moveScore = score
+			#print("Chosen Min Score: " + str(moveScore))
+			
+		self.level -= 1
+		return moveScore
+	
+	def myMoveRec(self, board, boardIndex):
+		self.level += 1
+		moveScore = 0
+		if board.checkWin(self.type):
+			if self.level == 1: #nextMoveWin for enemy
+				self.nextMoveFlag = boardIndex
+				self.nextMoveWin = True
+			moveScore = 1/self.level
+		elif board.checkWin(self.enemy):
+			if self.level == 2 and not self.nextMoveWin: #nextMoveWin for enemy
+				self.nextMoveFlag = boardIndex
+			moveScore = -1
+		elif len(board.squares_free()) < 1:	#already know a win didn't occur
+			moveScore = 0	#draw
+		else:
+			possMoves = board.squares_free()
+			for move in possMoves:
+				board.turn(move)
+				moveScore += self.myMoveRec(board, move)
+				board.undoTurn(move)	#reset board	
+		self.level -= 1
 		return moveScore
 	
 	def showDetails(self):
@@ -135,7 +196,7 @@ class AI:
 
 #show initial game board
 board = Board()
-cpu1 = AI('x')
+cpu1 = AI('o')
 
 #game initation
 cpu1.showDetails()
@@ -145,7 +206,7 @@ board.show_tiles()
 #game main loop
 for game_turn in range(0,9):
 	#check turn
-	if board.user_turn():
+	if not board.user_turn():
 		#make user move
 		x = int(input("Enter move: "))
 		board.turn(x)
@@ -159,11 +220,10 @@ for game_turn in range(0,9):
 	
 	#check win
 	if board.checkWin('x'):
-		print('X wins the game')
+		print('##### X wins the game#####')
 		break
 	elif board.checkWin('o'):
-		print('O wins the game')
+		print('##### O wins the game#####')
 		break
 
-print("Program finished 305")
-input("Press Enter")
+input("Game Over: Press Enter")
