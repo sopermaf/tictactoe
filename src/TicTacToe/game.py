@@ -53,7 +53,7 @@ class Board:
     # checks if a given player won
     def has_won(self, player) -> bool:
         """Check if tiles match for a player win condition"""
-        horizontals = ((i, i + 2, i + 3) for i in range(0, 3))
+        horizontals = ((i, i + 1, i + 2) for i in range(0, 3))
         verticals = ((i, i + 3, i + 6) for i in range(0, 3))
         diagonals = ((0, 4, 8), (2, 4, 6))
 
