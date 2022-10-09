@@ -1,8 +1,7 @@
 """Command-line interface."""
 import click
 
-from TicTacToe.player import AI
-from TicTacToe.player import TerminalUser
+from TicTacToe.player import AI, TerminalUser
 
 from . import game
 
