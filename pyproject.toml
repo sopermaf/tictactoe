@@ -46,7 +46,7 @@ xdoctest = {extras = ["colors"], version = ">=0.15.10"}
 myst-parser = {version = ">=0.16.1"}
 
 [tool.poetry.scripts]
-tictactoe = "TicTacToe _ MaxMin.__main__:main"
+tictactoe = "TicTacToe.__main__:main"
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
@@ -54,7 +54,7 @@ tests = ["tests", "*/tests"]
 
 [tool.coverage.run]
 branch = true
-source = ["TicTacToe _ MaxMin", "tests"]
+source = ["TicTacToe", "tests"]
 
 [tool.coverage.report]
 show_missing = true

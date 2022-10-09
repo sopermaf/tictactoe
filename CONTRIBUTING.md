@@ -12,6 +12,7 @@ Here is a list of important resources for contributors:
 - [Code of Conduct]
 
 [mit license]: https://opensource.org/licenses/MIT
+
 [source code]: https://github.com/sopermaf/TicTacToe - MaxMin
 [documentation]: https://TicTacToe - MaxMin.readthedocs.io/
 [issue tracker]: https://github.com/sopermaf/TicTacToe - MaxMin/issues

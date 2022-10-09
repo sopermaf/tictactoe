@@ -1,4 +1,4 @@
-# Tictactoe   Maxmin
+# Tictactoe Maxmin
 
 [![PyPI](https://img.shields.io/pypi/v/TicTacToe - MaxMin.svg)][pypi status]
 [![Status](https://img.shields.io/pypi/status/TicTacToe - MaxMin.svg)][pypi status]
@@ -29,7 +29,7 @@
 
 ## Installation
 
-You can install _Tictactoe   Maxmin_ via [pip] from [PyPI]:
+You can install _Tictactoe Maxmin_ via [pip] from [PyPI]:
 
 ```console
 $ pip install TicTacToe - MaxMin
@@ -47,7 +47,7 @@ To learn more, see the [Contributor Guide].
 ## License
 
 Distributed under the terms of the [MIT license][license],
-_Tictactoe   Maxmin_ is free and open source software.
+_Tictactoe Maxmin_ is free and open source software.
 
 ## Issues
 
@@ -61,6 +61,7 @@ This project was generated from [@cjolowicz]'s [Hypermodern Python Cookiecutter]
 [@cjolowicz]: https://github.com/cjolowicz
 [pypi]: https://pypi.org/
 [hypermodern python cookiecutter]: https://github.com/cjolowicz/cookiecutter-hypermodern-python
+
 [file an issue]: https://github.com/sopermaf/TicTacToe - MaxMin/issues
 [pip]: https://pip.pypa.io/
 

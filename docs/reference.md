@@ -1,8 +1,8 @@
 # Reference
 
-## TicTacToe _ MaxMin
+## TicTacToe \_ MaxMin
 
 ```{eval-rst}
-.. automodule:: TicTacToe _ MaxMin
+.. automodule:: TicTacToe
    :members:
 ```

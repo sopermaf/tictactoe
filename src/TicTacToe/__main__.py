@@ -3,6 +3,7 @@ import click
 
 from . import game
 
+
 @click.command()
 @click.version_option()
 def main() -> None:

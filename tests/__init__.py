@@ -1,1 +1,1 @@
-"""Test suite for the TicTacToe _ MaxMin package."""
+"""Test suite for the TicTacToe package."""

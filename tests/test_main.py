@@ -1,8 +1,7 @@
 """Test cases for the __main__ module."""
 import pytest
 from click.testing import CliRunner
-
-from TicTacToe _ MaxMin import __main__
+from TicTacToe_MaxMin import __main__
 
 
 @pytest.fixture
