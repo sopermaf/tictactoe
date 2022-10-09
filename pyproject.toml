@@ -1,19 +1,11 @@
 [tool.poetry]
 name = "TicTacToe"
 version = "0.1.0"
-description = "Tictactoe   Maxmin"
+description = "TicTacToe Maxmin"
 authors = ["Ferdia Soper Mac Cafraidh <sopermaf@tcd.ie>"]
-license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/sopermaf/TicTacToe"
-repository = "https://github.com/sopermaf/TicTacToe"
-documentation = "https://TicTacToe.readthedocs.io"
-classifiers = [
-    "Development Status :: 3 - Alpha",
-]
-
-[tool.poetry.urls]
-Changelog = "https://github.com/sopermaf/TicTacToe/releases"
+homepage = "https://github.com/sopermaf/Tic-Tac-Toe---MaxMin-AI"
+repository = "https://github.com/sopermaf/Tic-Tac-Toe---MaxMin-AI"
 
 [tool.poetry.dependencies]
 python = "^3.10"
