@@ -2,6 +2,6 @@
 
 ```{eval-rst}
 .. click:: TicTacToe.__main__:main
-    :prog: TicTacToe - MaxMin
+    :prog: TicTacToe
     :nested: full
 ```

@@ -19,5 +19,5 @@ reference
 contributing
 Code of Conduct <codeofconduct>
 License <license>
-Changelog <https://github.com/sopermaf/TicTacToe - MaxMin/releases>
+Changelog <https://github.com/sopermaf/TicTacToe/releases>
 ```
