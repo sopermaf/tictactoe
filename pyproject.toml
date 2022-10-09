@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "TicTacToe"
 version = "0.1.0"
-description = "TicTacToe Maxmin"
+description = "TicTacToe"
 authors = ["Ferdia Soper Mac Cafraidh <sopermaf@tcd.ie>"]
 readme = "README.md"
 homepage = "https://github.com/sopermaf/Tic-Tac-Toe---MaxMin-AI"
