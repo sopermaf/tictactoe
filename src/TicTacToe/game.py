@@ -1,3 +1,4 @@
+"""Game definition for running TicTacToe with AI using MinMax algorithm"""
 import itertools
 
 
@@ -5,11 +6,14 @@ infinity = 1000000
 
 
 class Board:
+    """Board used to play TicTacToe"""
+
     def __init__(self):
         self.tile = ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
         self.turn_count = 1
 
     def show_tiles(self):
+        """Displays board"""
         for i in range(0, 3):
             offset = i * 3
             # print(offset)
@@ -22,18 +26,14 @@ class Board:
             )
 
     def user_turn(self):
-        if self.turn_count % 2 == 0:
-            return False
-        return True
+        return self.turn_count % 2 != 0
 
-    def turn(self, square):
-        piece = "x"
-        if self.user_turn() == True:
-            piece = "o"
+    def turn(self, square: int):
+        piece = "x" if self.user_turn() else "o"
         self.tile[square] = piece
         self.turn_count += 1
 
-    def undoTurn(self, square):
+    def undo_turn(self, square):
         if self.tile[square] == "-":
             print(
                 "ERROR UndoTurn: no turn existed in square " + str(square) + " to undo"
@@ -64,138 +64,136 @@ class Board:
 
 
 class AI:
+    """Computer TicTacToe Player"""
+
     def __init__(self, type):
         self.type = type
         self.level = 0
-        self.nextMoveFlag = -1  # -1 if no next move win
-        self.nextMoveWin = False  # so as winning moves aren't overwritten with moves that only prevent opponent wins
+        self.next_move_flag = -1  # -1 if no next move win
+        # so as winning moves aren't overwritten with moves
+        # that only prevent opponent wins
+        self.next_move_win = False
 
         if type == "o":
             self.enemy = "x"
         else:
             self.enemy = "o"
 
-    # just returns first available move
-    def takeTurn(self, board: Board):
-        bestMove = self.decideMove(board)
-        print("AI chooses move " + str(bestMove))
-        return bestMove
-
-    def decideMove(self, board: Board):
-        possMoves = board.squares_free()
-        possMovesScore = []
+    def take_turn(self, board: Board) -> int:
+        """Return board tile to take turn"""
+        poss_moves = board.squares_free()
+        poss_moves_score = []
 
         # rate each Move
-        for move in possMoves:
+        print("Thinking ...")
+        for move in poss_moves:
             board.turn(move)
-            moveScore = self.myMove(board, move)
-            board.undoTurn(move)
-            possMovesScore.append(moveScore)
+            move_score = self._my_move(board, move)
+            board.undo_turn(move)
+            poss_moves_score.append(move_score)
 
         # find best move
-        bestMoveIndex = 0
-        print("Move ratings: " + str(possMovesScore))
+        best_move_index = 0
+        # print("Move ratings: " + str(possMovesScore))
         # print("Rate available moves")
-        for i in range(0, len(possMovesScore)):
-            if possMovesScore[bestMoveIndex] < possMovesScore[i]:
-                bestMoveIndex = i
+        for i in range(0, len(poss_moves_score)):
+            if poss_moves_score[best_move_index] < poss_moves_score[i]:
+                best_move_index = i
         # take the max move
 
         # check for next move wins/losses
-        if self.nextMoveFlag != -1:
-            print("Next Move Flag for board position: " + str(self.nextMoveFlag))
-            bestMoveIndex = possMoves.index(self.nextMoveFlag)  # change the index
-            self.nextMoveFlag = -1
-            self.nextMoveWin = False
+        if self.next_move_flag != -1:
+            print("Next Move Flag for board position: " + str(self.next_move_flag))
+            best_move_index = poss_moves.index(self.next_move_flag)  # change the index
+            self.next_move_flag = -1
+            self.next_move_win = False
 
-        return possMoves[bestMoveIndex]  # squareNumber of bestMove
+        print("I know!")
+        return poss_moves[best_move_index]  # squareNumber of bestMove
 
-    def myMove(self, board: Board, boardIndex: int):
+    def _my_move(self, board: Board, board_index: int):
         self.level += 1
-        moveScore = -100
+        move_score = -100
         if board.has_won(self.type):
             if self.level == 1:
-                self.nextMoveFlag = boardIndex
-                self.nextMoveWin = True
-            moveScore = 1
+                self.next_move_flag = board_index
+                self.next_move_win = True
+            move_score = 1
         elif board.has_won(self.enemy):
-            moveScore = -1
+            move_score = -1
         elif len(board.squares_free()) < 1:
-            moveScore = 0  # draw
+            move_score = 0  # draw
         else:
-            possMoves = board.squares_free()
-            moveScores = []  # array of possibilities
+            poss_moves = board.squares_free()
+            move_scores = []  # array of possibilities
             # get all possible scores
-            for move in possMoves:
+            for move in poss_moves:
                 board.turn(move)
-                moveScores.append(self.enemyMove(board, move))
-                board.undoTurn(move)  # reset board
+                move_scores.append(self._enemy_move(board, move))
+                board.undo_turn(move)  # reset board
 
             # get Max possible
-            print("Possible Scores: " + str(moveScores))
-            for score in moveScores:
-                if moveScore < score:
-                    moveScore = score
-            print("Chosen Max Score: " + str(moveScore))
+            # print("Possible Scores: " + str(moveScores))
+            for score in move_scores:
+                if move_score < score:
+                    move_score = score
+            # print("Chosen Max Score: " + str(moveScore))
 
         self.level -= 1
-        return moveScore
+        return move_score
 
-    def enemyMove(self, board: Board, boardIndex: int):
+    def _enemy_move(self, board: Board, board_index: int):
         self.level += 1
-        moveScore = 100
+        move_score = 100
         if board.has_won(self.type):
-            moveScore = -1
+            move_score = -1
         elif board.has_won(self.enemy):
-            if self.level == 2 and not self.nextMoveWin:  # nextMoveWin for enemy
-                self.nextMoveFlag = boardIndex
-            moveScore = 1
+            if self.level == 2 and not self.next_move_win:  # nextMoveWin for enemy
+                self.next_move_flag = board_index
+            move_score = 1
         elif len(board.squares_free()) < 1:
-            moveScore = 0  # draw
+            move_score = 0  # draw
         else:
-            possMoves = board.squares_free()
-            moveScores = []  # array of possibilities
+            poss_moves = board.squares_free()
+            move_scores = []  # array of possibilities
             # get all possible scores
-            for move in possMoves:
+            for move in poss_moves:
                 board.turn(move)
-                moveScores.append(self.enemyMove(board, move))
-                board.undoTurn(move)  # reset board
+                move_scores.append(self._enemy_move(board, move))
+                board.undo_turn(move)  # reset board
 
             # get min possible
             # print("Possible Scores: " + str(moveScores))
-            for score in moveScores:
-                if moveScore > score:
-                    moveScore = score
+            for score in move_scores:
+                if move_score > score:
+                    move_score = score
             # print("Chosen Min Score: " + str(moveScore))
 
         self.level -= 1
-        return moveScore
+        return move_score
 
-    def myMoveRec(self, board: Board, boardIndex: int):
+    def _my_move_rec(self, board: Board, board_index: int):
         self.level += 1
-        moveScore = 0
+        move_score = 0
         if board.has_won(self.type):
             if self.level == 1:  # nextMoveWin for enemy
-                self.nextMoveFlag = boardIndex
-                self.nextMoveWin = True
-            moveScore = 1 / self.level
+                self.next_move_flag = board_index
+                self.next_move_win = True
+            move_score = 1 / self.level
         elif board.has_won(self.enemy):
-            if self.level == 2 and not self.nextMoveWin:  # nextMoveWin for enemy
-                self.nextMoveFlag = boardIndex
-            moveScore = -1
+            if self.level == 2 and not self.next_move_win:  # nextMoveWin for enemy
+                self.next_move_flag = board_index
+            move_score = -1
         elif len(board.squares_free()) < 1:  # already know a win didn't occur
-            moveScore = 0  # draw
+            move_score = 0  # draw
         else:
-            possMoves = board.squares_free()
-            for move in possMoves:
+            poss_moves = board.squares_free()
+            for move in poss_moves:
                 board.turn(move)
-                moveScore += self.myMoveRec(board, move)
-                board.undoTurn(move)  # reset board
+                move_score += self._my_move_rec(board, move)
+                board.undo_turn(move)  # reset board
         self.level -= 1
-        return moveScore
-
-    def showDetails(self):
-        print("AI is " + self.type)
+        return move_score
 
 
 def game_loop():
@@ -204,31 +202,26 @@ def game_loop():
     cpu1 = AI("o")
 
     # game initation
-    cpu1.showDetails()
     print("***START GAME***")
     board.show_tiles()
 
     # game main loop
-    for game_turn in range(0, 9):
-        # check turn
+    for _ in range(0, 9):
         if not board.user_turn():
-            # make user move
             x = int(input("Enter move: "))
             board.turn(x)
         else:
-            # computer move
-            cpuTurn = cpu1.takeTurn(board)
-            # x = int(input("Enter move: "))
-            board.turn(cpuTurn)
+            cpu_turn = cpu1.take_turn(board)
+            board.turn(cpu_turn)
 
         board.show_tiles()
 
-        # check win
-        if board.has_won("x"):
-            print("##### X wins the game#####")
-            break
-        elif board.has_won("o"):
-            print("##### O wins the game#####")
-            break
+        for player in ("x", "o"):
+            if board.has_won(player):
+                print(f"##### {player.upper()!r} wins the game#####")
+                break
+        else:
+            continue
+        break
 
     input("Game Over: Press Enter")
