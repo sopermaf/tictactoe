@@ -1,5 +1,5 @@
-from TicTacToe.game import AbstractPlayer, Game
-from TicTacToe.player import AI
+from tictactoe.game import AbstractPlayer, Game
+from tictactoe.player import AI
 
 
 class Dummy(AbstractPlayer):

@@ -1,4 +1,4 @@
-from TicTacToe.game import AbstractPlayer, Game
+from tictactoe.game import AbstractPlayer, Game
 
 
 class TerminalUser(AbstractPlayer):

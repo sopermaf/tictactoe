@@ -1,7 +1,7 @@
 """Test cases for the __main__ module."""
 import pytest
 
-from TicTacToe.game import AbstractPlayer, Game
+from tictactoe.game import AbstractPlayer, Game
 
 
 class User(AbstractPlayer):
