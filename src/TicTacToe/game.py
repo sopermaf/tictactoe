@@ -1,7 +1,6 @@
 """Game definition for running TicTacToe with AI using MinMax algorithm"""
 import itertools
 from abc import ABC, abstractmethod
-from typing import Iterable
 
 
 class AbstractPlayer(ABC):
@@ -69,7 +68,7 @@ class Game:
 
         return not bool(self.squares_free())
 
-    def run_game(self, *players: Iterable[AbstractPlayer]):
+    def run_game(self, *players: AbstractPlayer):
         print("***START GAME***")
         players = itertools.cycle(players)
 
