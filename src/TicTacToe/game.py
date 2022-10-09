@@ -1,3 +1,6 @@
+import itertools
+
+
 infinity = 1000000
 
 
@@ -48,32 +51,16 @@ class Board:
         return free
 
     # checks if a given player won
-    def checkWin(self, type):
-        # horizontal
-        for x in range(0, 3):
-            offset = x * 3
-            if (
-                type == self.tile[offset]
-                and type == self.tile[offset + 1]
-                and type == self.tile[offset + 2]
-            ):
-                return True
-        # vertical
-        for x in range(0, 3):
-            if (
-                type == self.tile[x]
-                and type == self.tile[x + 3]
-                and type == self.tile[x + 6]
-            ):
-                return True
-        # diagonal
-        if type == self.tile[0] and type == self.tile[4] and type == self.tile[8]:
-            return True
-        if type == self.tile[2] and type == self.tile[4] and type == self.tile[6]:
-            return True
+    def has_won(self, player) -> bool:
+        """Check if tiles match for a player win condition"""
+        horizontals = ((i, i + 2, i + 3) for i in range(0, 3))
+        verticals = ((i, i + 3, i + 6) for i in range(0, 3))
+        diagonals = ((0, 4, 8), (2, 4, 6))
 
-
-stack = []
+        for row in itertools.chain(horizontals, verticals, diagonals):
+            if all(player == self.tile[i] for i in row):
+                return True
+        return False
 
 
 class AI:
@@ -89,12 +76,12 @@ class AI:
             self.enemy = "o"
 
     # just returns first available move
-    def takeTurn(self, board):
+    def takeTurn(self, board: Board):
         bestMove = self.decideMove(board)
         print("AI chooses move " + str(bestMove))
         return bestMove
 
-    def decideMove(self, board):
+    def decideMove(self, board: Board):
         possMoves = board.squares_free()
         possMovesScore = []
 
@@ -123,15 +110,15 @@ class AI:
 
         return possMoves[bestMoveIndex]  # squareNumber of bestMove
 
-    def myMove(self, board, boardIndex):
+    def myMove(self, board: Board, boardIndex: int):
         self.level += 1
         moveScore = -100
-        if board.checkWin(self.type):
+        if board.has_won(self.type):
             if self.level == 1:
                 self.nextMoveFlag = boardIndex
                 self.nextMoveWin = True
             moveScore = 1
-        elif board.checkWin(self.enemy):
+        elif board.has_won(self.enemy):
             moveScore = -1
         elif len(board.squares_free()) < 1:
             moveScore = 0  # draw
@@ -154,12 +141,12 @@ class AI:
         self.level -= 1
         return moveScore
 
-    def enemyMove(self, board, boardIndex):
+    def enemyMove(self, board: Board, boardIndex: int):
         self.level += 1
         moveScore = 100
-        if board.checkWin(self.type):
+        if board.has_won(self.type):
             moveScore = -1
-        elif board.checkWin(self.enemy):
+        elif board.has_won(self.enemy):
             if self.level == 2 and not self.nextMoveWin:  # nextMoveWin for enemy
                 self.nextMoveFlag = boardIndex
             moveScore = 1
@@ -184,15 +171,15 @@ class AI:
         self.level -= 1
         return moveScore
 
-    def myMoveRec(self, board, boardIndex):
+    def myMoveRec(self, board: Board, boardIndex: int):
         self.level += 1
         moveScore = 0
-        if board.checkWin(self.type):
+        if board.has_won(self.type):
             if self.level == 1:  # nextMoveWin for enemy
                 self.nextMoveFlag = boardIndex
                 self.nextMoveWin = True
             moveScore = 1 / self.level
-        elif board.checkWin(self.enemy):
+        elif board.has_won(self.enemy):
             if self.level == 2 and not self.nextMoveWin:  # nextMoveWin for enemy
                 self.nextMoveFlag = boardIndex
             moveScore = -1
@@ -237,10 +224,10 @@ def game_loop():
         board.show_tiles()
 
         # check win
-        if board.checkWin("x"):
+        if board.has_won("x"):
             print("##### X wins the game#####")
             break
-        elif board.checkWin("o"):
+        elif board.has_won("o"):
             print("##### O wins the game#####")
             break
 
