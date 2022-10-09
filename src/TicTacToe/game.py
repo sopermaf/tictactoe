@@ -1,13 +1,11 @@
 """Game definition for running TicTacToe with AI using MinMax algorithm"""
 import itertools
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Iterable
 
 
-infinity = 1000000
-
-
 class AbstractPlayer(ABC):
+    @abstractmethod
     def decide_turn(self, game) -> int:
         pass
 

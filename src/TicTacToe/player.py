@@ -22,7 +22,7 @@ class AI(AbstractPlayer):
         else:
             self.enemy = "o"
 
-    def decide_turb(self, board: Game) -> int:
+    def decide_turn(self, board: Game) -> int:
         """Return board tile to take turn"""
         poss_moves = board.squares_free()
         poss_moves_score = []
