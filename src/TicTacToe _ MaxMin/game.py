@@ -193,37 +193,37 @@ class AI:
 		print("AI is " + self.type)
 
 
+def game_loop():
+	#show initial game board
+	board = Board()
+	cpu1 = AI('o')
 
-#show initial game board
-board = Board()
-cpu1 = AI('o')
-
-#game initation
-cpu1.showDetails()
-print("***START GAME***")
-board.show_tiles()
-
-#game main loop
-for game_turn in range(0,9):
-	#check turn
-	if not board.user_turn():
-		#make user move
-		x = int(input("Enter move: "))
-		board.turn(x)
-	else:
-		#computer move
-		cpuTurn = cpu1.takeTurn(board)
-		#x = int(input("Enter move: "))
-		board.turn(cpuTurn)
-	
+	#game initation
+	cpu1.showDetails()
+	print("***START GAME***")
 	board.show_tiles()
-	
-	#check win
-	if board.checkWin('x'):
-		print('##### X wins the game#####')
-		break
-	elif board.checkWin('o'):
-		print('##### O wins the game#####')
-		break
 
-input("Game Over: Press Enter")
+	#game main loop
+	for game_turn in range(0,9):
+		#check turn
+		if not board.user_turn():
+			#make user move
+			x = int(input("Enter move: "))
+			board.turn(x)
+		else:
+			#computer move
+			cpuTurn = cpu1.takeTurn(board)
+			#x = int(input("Enter move: "))
+			board.turn(cpuTurn)
+		
+		board.show_tiles()
+		
+		#check win
+		if board.checkWin('x'):
+			print('##### X wins the game#####')
+			break
+		elif board.checkWin('o'):
+			print('##### O wins the game#####')
+			break
+
+	input("Game Over: Press Enter")
