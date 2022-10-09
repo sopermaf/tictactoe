@@ -40,6 +40,12 @@ repos:
         types: [python]
         require_serial: true
         args: [--darglint-ignore-regex, .*]
+      - id: refurb
+        name: refurb
+        entry: refurb
+        language: system
+        types: [python]
+        require_serial: true
       - id: isort
         name: isort
         entry: isort
