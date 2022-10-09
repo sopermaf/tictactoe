@@ -1,0 +1,14 @@
+{
+  "_output_dir": "/Users/ferdia/projects",
+  "_template": "cookiecutter-hypermodern-python",
+  "author": "Ferdia Soper Mac Cafraidh",
+  "copyright_year": "2022",
+  "development_status": "Development Status :: 3 - Alpha",
+  "email": "sopermaf@tcd.ie",
+  "friendly_name": "Tictactoe   Maxmin",
+  "github_user": "sopermaf",
+  "license": "MIT",
+  "package_name": "TicTacToe _ MaxMin",
+  "project_name": "TicTacToe - MaxMin",
+  "version": "0.1.0"
+}
