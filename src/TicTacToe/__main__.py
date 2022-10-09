@@ -1,6 +1,9 @@
 """Command-line interface."""
 import click
 
+from TicTacToe.player import AI
+from TicTacToe.player import TerminalUser
+
 from . import game
 
 
@@ -8,7 +11,7 @@ from . import game
 @click.version_option()
 def main() -> None:
     """Tictactoe   Maxmin."""
-    game.game_loop()
+    game.Game.run_game(AI("o"), TerminalUser())
 
 
 if __name__ == "__main__":
