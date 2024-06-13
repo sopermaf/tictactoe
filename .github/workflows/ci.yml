@@ -22,11 +22,10 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install dependencies
-        run: |
-          python -m pip install -e ."[dev]"
+        run: pip install hatch
       - name: Pytest
-        run: pytest tests
+        run: hatch test
       - name: Lint with Pre-Commit
-        run: pre-commit run --all-files
+        run: hatch run pre-commit run --all-files
       - name: Typing
-        run: mypy .
+        run: hatch run mypy .
