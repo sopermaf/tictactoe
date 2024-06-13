@@ -1,4 +1,5 @@
 """Nox sessions."""
+
 import os
 import shlex
 import sys
@@ -7,9 +8,9 @@ from textwrap import dedent
 
 import nox
 
-
 try:
-    from nox_poetry import Session, session
+    from nox_poetry import Session
+    from nox_poetry import session
 except ImportError:
     message = f"""\
     Nox failed to import the 'nox-poetry' package.
@@ -41,7 +42,7 @@ def activate_virtualenv_in_precommit_hooks(session: Session) -> None:
     Args:
         session: The Session object.
     """
-    assert session.bin is not None  # noqa: S101
+    assert session.bin is not None
 
     # Only patch hooks containing a reference to this session's bindir. Support
     # quoting rules for Python and bash, but strip the outermost quotes so we
