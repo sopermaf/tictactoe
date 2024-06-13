@@ -1,6 +1,9 @@
 """Game definition for running TicTacToe with AI using MinMax algorithm"""
+
 import itertools
 from abc import ABC, abstractmethod
+
+import click
 
 
 class AbstractPlayer(ABC):
@@ -18,14 +21,14 @@ class Game:
 
     def display(self):
         """Displays board"""
-        for i in range(0, 3):
+        for i in range(3):
             offset = i * 3
-            print(
+            click.echo(
                 str(self.tile[offset])
                 + " "
                 + str(self.tile[offset + 1])
                 + " "
-                + str(self.tile[offset + 2])
+                + str(self.tile[offset + 2]),
             )
 
     def user_turn(self):
@@ -38,8 +41,8 @@ class Game:
 
     def undo_turn(self, square):
         if self.tile[square] == "-":
-            print(
-                "ERROR UndoTurn: no turn existed in square " + str(square) + " to undo"
+            click.echo(
+                "ERROR UndoTurn: no turn existed in square " + str(square) + " to undo",
             )
             return
 
@@ -63,18 +66,20 @@ class Game:
     def is_over(self) -> bool:
         for player in ("x", "o"):
             if self.has_won(player):
-                print(f"##### {player.upper()!r} wins the game#####")
+                click.echo(f"##### {player.upper()!r} wins the game#####")
                 return True
 
         return not bool(self.squares_free())
 
-    def run_game(self, *players: AbstractPlayer):
-        print("***START GAME***")
-        players = itertools.cycle(players)
+    def run_game(self, *players: "AbstractPlayer"):
+        click.echo("***START GAME***")
 
-        while not self.is_over():
+        for player in itertools.cycle(players):
+            if self.is_over():
+                break
+
             self.display()
-            turn = next(players).decide_turn(self)
-            self.turn(turn)
+            square_to_place = player.decide_turn(self)
+            self.turn(square_to_place)
 
         self.display()
