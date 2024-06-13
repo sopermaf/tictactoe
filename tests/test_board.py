@@ -1,4 +1,5 @@
 """Test cases for the __main__ module."""
+
 import pytest
 
 from tictactoe.game import AbstractPlayer, Game
@@ -36,7 +37,7 @@ def test_has_won(row):
 
 
 @pytest.mark.parametrize(
-    "occupied, exp",
+    ("occupied", "exp"),
     [
         (range(9), []),
         ([], range(9)),
@@ -53,7 +54,7 @@ def test_squares_free(occupied, exp):
 
 
 @pytest.mark.parametrize(
-    "player_1, player_2, winner",
+    ("player_1", "player_2", "winner"),
     [
         (User(0, 1, 2), User(3, 5), "x"),
         (User(0, 2, 7), User(3, 5, 4), "o"),
