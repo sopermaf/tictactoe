@@ -1,4 +1,5 @@
 """Command-line interface."""
+
 import click
 
 from .game import Game
