@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,11 +21,15 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: "3.11"
+
       - name: Install dependencies
-        run: pip install hatch
+        run: pip install -r requirements.txt
+
       - name: Pytest
-        run: hatch test
-      - name: Lint with Pre-Commit
-        run: hatch run pre-commit run --all-files
+        run: pytest
+
       - name: Typing
-        run: hatch run mypy .
+        run: mypy .
+
+      - name: Lint
+        run: pre-commit run --all-files
