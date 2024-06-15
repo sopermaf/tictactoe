@@ -1,5 +1,4 @@
 import logging
-import random
 
 import click
 
@@ -12,17 +11,13 @@ class MaxMinAI(AbstractPlayer):
     def tile_to_play(self, board: TicTacToeBoard) -> int:
         """Return board tile to take turn"""
         click.echo("My Turn!")
-        tile_scores = sorted(
-            (
-                (self._rate_move(board, tile, level=1, is_my_turn=True), tile)
-                for tile in board.free_tiles
-            ),
-            reverse=True,
-        )
-        top_scores = [t for score, t in tile_scores if score == tile_scores[0][0]]
-        log.debug("Scores for Tiles: %s %s", tile_scores, top_scores)
+        tile_scores = [
+            (self._rate_move(board, tile, level=1, is_my_turn=True), tile)
+            for tile in board.free_tiles
+        ]
+        log.debug("Scores for Tiles: %s", tile_scores)
 
-        return random.choice(top_scores)  # noqa: S311
+        return max(tile_scores)[1]
 
     def _rate_move(
         self,
